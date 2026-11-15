@@ -1,0 +1,53 @@
+{
+  "config": {
+    "base": {
+      "lead_days": 7,
+      "review_days": 7,
+      "safety_z": 1.28,
+      "initial_cover_days": 7,
+      "budget_per_review": 3000,
+      "purchase_price_fraction": 0.5,
+      "annual_holding_rate": 0.25,
+      "shortage_cost_multiple": 2.0,
+      "pack_size": 6,
+      "moq": 12
+    },
+    "tight_budget": {
+      "lead_days": 7,
+      "review_days": 7,
+      "safety_z": 1.28,
+      "initial_cover_days": 7,
+      "budget_per_review": 1500,
+      "purchase_price_fraction": 0.5,
+      "annual_holding_rate": 0.25,
+      "shortage_cost_multiple": 2.0,
+      "pack_size": 6,
+      "moq": 12
+    },
+    "slow_supply": {
+      "lead_days": 14,
+      "review_days": 7,
+      "safety_z": 1.65,
+      "initial_cover_days": 7,
+      "budget_per_review": 3000,
+      "purchase_price_fraction": 0.5,
+      "annual_holding_rate": 0.35,
+      "shortage_cost_multiple": 3.0,
+      "pack_size": 6,
+      "moq": 12
+    }
+  },
+  "selected_model": "auto_ets",
+  "start": "2011-11-11",
+  "end": "2011-12-08",
+  "seed": 42,
+  "sha256": {
+    "config/scenarios.json": "81f5cc0e71f20e0d105e9e9ec70bc30c31750d5dc4875d6432ae045a9fe17344",
+    "src/inventory.py": "236694d0d319870476ef19870d85d19c9ace9bcd7afce485d6ae93398730ebfc",
+    "src/optimization.py": "dcc0959d25646e0552b21f2f378dea2bf2fc0219d199a8022a7bf1e9e89a7fd7",
+    "src/simulation.py": "370646f1045d6c40fb1a60ff43f03400fb71b8eb392bd24af625485671bad2b3",
+    "reports/simulation-summary.csv": "3a825da4c14b9d033a16deaaafb849bb889e02ff58fec6101fb8bb5d794ac0d9",
+    "reports/simulation-ledger.csv": "6e89af748887cc17c5ca436c71402b2515e7864c0dcb564c3b2a070420c34bda",
+    "reports/simulation-orders.csv": "a851288aad5754e0c7bbca7a6b8087c863c28feca12cda1a59ecadecc1cd598e"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "local_demo": "GO",
+  "business_pilot": "CONDITIONAL GO",
+  "production": "NO-GO",
+  "forecast_quality_gate_pass": true,
+  "constraint_gate_pass": true,
+  "test_evidence": {
+    "tests": 55,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "browser_verified": true,
+  "rationale": "Development forecast target passed, but base-scenario forecast/optimized policies cost more than the traditional baseline and service is weak. Observed sales are censored demand proxies and operational costs/stock are assumed. Retain the baseline for purchasing; consider only a conditional analytical shadow pilot with real operational inputs and monitoring. Production purchasing is not supported."
+}

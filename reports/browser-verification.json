@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "verified_at_utc": "2026-11-15T15:55:47.962065+00:00",
+  "url": "http://127.0.0.1:8501",
+  "driver": "gstack browse / real headless Chromium",
+  "viewport": "1600x1200",
+  "checks": [
+    {
+      "page": "Executive Dashboard",
+      "passed": true,
+      "evidence": "25 products, holdout WAPE 70.5%, base C cost reduction -2.4%; two rendered Plotly charts"
+    },
+    {
+      "page": "Demand Forecasting",
+      "passed": true,
+      "evidence": "Historical product/holdout plot and model-error table; changed to 7 days and future refit; forecast traces start 2011-12-09 and contain seven dates"
+    },
+    {
+      "page": "Inventory Recommendations",
+      "passed": true,
+      "evidence": "Editable assumption grid rendered, Apply assumptions submitted, recommendation KPIs/table and CSV export visible. Cell-change behavior separately checked by Streamlit AppTest."
+    },
+    {
+      "page": "Budget Optimization",
+      "passed": true,
+      "evidence": "OR-Tools OPTIMAL at 3000, 1500 and zero GBP; budget edit invalidates prior plan, allocation within budget, simulated accept and reject confirmations; no purchase submitted",
+      "budget_1500_metrics": [
+        " \u00a31,499 ",
+        " \u00a31 ",
+        " OPTIMAL ",
+        " 3,570 "
+      ]
+    },
+    {
+      "page": "Business Impact",
+      "passed": true,
+      "evidence": "Base A/B/C costs, service table and three-scenario chart rendered; switched to slow_supply; simulation disclaimer visible"
+    },
+    {
+      "page": "Evaluation & Deployment Readiness",
+      "passed": true,
+      "evidence": "Development/holdout comparison, frozen cutoff, acceptance/risk explanation and separate readiness levels rendered; no console errors"
+    }
+  ],
+  "console_errors": 0,
+  "scope": "Local UI behavior only; no live inventory integration, no external order submissions, no GitHub CI execution"
+}

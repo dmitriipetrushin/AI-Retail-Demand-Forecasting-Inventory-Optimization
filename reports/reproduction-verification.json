@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "verified_at_utc": "2026-11-15T15:51:26.846564+00:00",
+  "elapsed_seconds": 43.303,
+  "method": "Isolated temporary source/config copy; fresh preparation, all model fitting and final holdout; same downloaded official source bytes. Main artifacts were never overwritten.",
+  "commands": [
+    {
+      "command": "python -m scripts.download_data",
+      "passed": true,
+      "seconds": 0.354
+    },
+    {
+      "command": "python -m scripts.prepare_data",
+      "passed": true,
+      "seconds": 23.079
+    },
+    {
+      "command": "python -m scripts.train_models",
+      "passed": true,
+      "seconds": 5.45
+    },
+    {
+      "command": "python -m scripts.run_evaluation",
+      "passed": true,
+      "seconds": 4.474
+    },
+    {
+      "command": "python -m scripts.run_simulation",
+      "passed": true,
+      "seconds": 9.077
+    },
+    {
+      "command": "python -m scripts.generate_reports",
+      "passed": true,
+      "seconds": 0.825
+    }
+  ],
+  "prepared_checksums_equal": {
+    "data/processed/daily_sales.csv": true,
+    "data/processed/products.csv": true
+  },
+  "comparisons": {
+    "development-comparison.csv": {
+      "passed": true,
+      "max_numeric_difference": 0.0
+    },
+    "holdout-comparison.csv": {
+      "passed": true,
+      "max_numeric_difference": 0.0
+    },
+    "simulation-summary.csv": {
+      "passed": true,
+      "max_numeric_difference": 0.0
+    }
+  },
+  "scope": "Local reproduction in the same tested Python environment; not independent multi-platform or GitHub CI validation"
+}

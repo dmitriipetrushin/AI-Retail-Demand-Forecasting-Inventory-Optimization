@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "verified_at_utc": "2026-11-15T15:56:07.846396+00:00",
+  "pm_documents": 12,
+  "risk_count": 21,
+  "tests": 55,
+  "test_failures": 0,
+  "test_skips": 0,
+  "screenshots": 6,
+  "broken_document_links": [],
+  "customer_or_invoice_ids_in_derivatives": false,
+  "daily_continuity_pass": true,
+  "frozen_and_holdout_integrity_pass": true,
+  "simulation_integrity_pass": true,
+  "dependencies_compatible": true,
+  "raw_and_venv_ignored": true,
+  "remote_ci_verified": false,
+  "production_integration_verified": false
+}

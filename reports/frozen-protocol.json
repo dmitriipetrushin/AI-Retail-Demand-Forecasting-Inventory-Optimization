@@ -1,0 +1,61 @@
+{
+  "frozen_at_utc": "2026-11-15T15:29:13.445877+00:00",
+  "selected_model": "auto_ets",
+  "selection_rule": "Lowest pooled development WAPE, ties by configured model order; global model for all products; no holdout tuning.",
+  "development_wape_improvement": 0.16943403496575293,
+  "forecast_quality_gate_pass": true,
+  "holdout_start": "2011-11-11",
+  "holdout_end": "2011-12-08",
+  "selection_cutoff": "2011-08-18",
+  "sha256": {
+    "config/project.json": "91559de7915503a1dcd3fd7c66128d2eff4aa9b592ae092fe10c54376c821d13",
+    "config/scenarios.json": "81f5cc0e71f20e0d105e9e9ec70bc30c31750d5dc4875d6432ae045a9fe17344",
+    "src/preprocessing.py": "c81bd258775cd8be9932018609e273b027010c20642d17b0d1638870f40e41b2",
+    "src/forecasting.py": "526252aec8721c0de1fa430b84fc859f624255f3c551763f45ecb352d866c063",
+    "src/evaluation.py": "04af33cdc6dd954e3234f6b278e34ea280762995cdc5d88042b491d75d81f9b7",
+    "data/processed/daily_sales.csv": "3fb54fa652922d6981515641ff1ae17ecbc39946dca4c93af01ea95191df207a",
+    "data/processed/products.csv": "850ef3b85c36f96d44478816140c7a3dc362f0bfad2a1d3c1b592b1eab8ecf05"
+  },
+  "development_artifacts": {
+    "reports/development-predictions.csv": "821287f24e4f239f88114e019a312fe87a575274d889dab0fd475cba2fe4381c",
+    "reports/development-comparison.csv": "0b19bf4e55ddd5975677b973f4485838bcb350406605a5ed6fd69a74ee74d035",
+    "reports/development-product-metrics.csv": "ec02f2428b74dc076e08ded4fb6d068e88486589a39dfe36a3ef3730b2292a50",
+    "reports/development-fold-metrics.csv": "0d84970eb5e104f07e103761784adf41d17b5f43979edaa3fefb0ce9c2ba0c1c"
+  },
+  "configuration": {
+    "seed": 42,
+    "products": 25,
+    "min_active_days": 90,
+    "min_history_days": 180,
+    "season_length": 7,
+    "moving_average_days": 28,
+    "horizons": [
+      7,
+      14,
+      28
+    ],
+    "primary_horizon": 28,
+    "backtest_windows": 3,
+    "exclude_last_calendar_day": true,
+    "models": [
+      "seasonal_naive",
+      "moving_average",
+      "auto_ets",
+      "croston_sba"
+    ],
+    "acceptance": {
+      "development_wape_improvement": 0.05,
+      "constraint_compliance": 1.0,
+      "max_model_fallback_fraction": 0.0
+    },
+    "selection_rule": "Lowest pooled development WAPE, ties by configured model order; global model for all products; no holdout tuning."
+  },
+  "python": "3.12.3",
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.2.3",
+    "statsforecast": "2.0.2",
+    "ortools": "9.12.4544",
+    "streamlit": "1.45.1"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "base": {"lead_days": 7, "review_days": 7, "safety_z": 1.28, "initial_cover_days": 7, "budget_per_review": 3000, "purchase_price_fraction": 0.5, "annual_holding_rate": 0.25, "shortage_cost_multiple": 2.0, "pack_size": 6, "moq": 12},
+  "tight_budget": {"lead_days": 7, "review_days": 7, "safety_z": 1.28, "initial_cover_days": 7, "budget_per_review": 1500, "purchase_price_fraction": 0.5, "annual_holding_rate": 0.25, "shortage_cost_multiple": 2.0, "pack_size": 6, "moq": 12},
+  "slow_supply": {"lead_days": 14, "review_days": 7, "safety_z": 1.65, "initial_cover_days": 7, "budget_per_review": 3000, "purchase_price_fraction": 0.5, "annual_holding_rate": 0.35, "shortage_cost_multiple": 3.0, "pack_size": 6, "moq": 12}
+}

@@ -1,0 +1,11 @@
+{
+  "evaluated_at_utc": "2026-11-15T15:33:51.143217+00:00",
+  "protocol_sha256": "90990f2f9338fc571008e1c8fbd73d89e1334d6f5f9af5d7d61fdd09fc751e1f",
+  "selected_model": "auto_ets",
+  "sha256": {
+    "reports/holdout-predictions.csv": "ef3e071d61019cb5e134437c56c3234660891bda1c0a4d50dccc06b7b1257b98",
+    "reports/holdout-comparison.csv": "582ce22d0d5786f84249a846c08db951c24d490b5d0e8714f641f52cf85efcfc",
+    "reports/holdout-product-metrics.csv": "80e4c8fe7c127d80d13bf5ea0386bf6b492e9f1486e9a3b1ac98f020d7522a17",
+    "reports/holdout-fold-metrics.csv": "81b8fa160e5a650d01f2b868a52fd281b79558d23fd4ded6045781dc953d4e75"
+  }
+}

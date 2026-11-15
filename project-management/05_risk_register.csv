@@ -1,0 +1,22 @@
+risk_id,risk,probability,impact,mitigation,owner_role,status
+R01,Poor transaction data quality,High,High,"Schema, missingness, duplicates and unit/price gates; block invalid runs",Data Analyst,Mitigated in demo
+R02,Forecast underperformance,Medium,High,Predeclare baseline/5% development gate; retain weak products and baseline,ML Engineer,Partly mitigated; high absolute errors
+R03,Future leakage,Medium,Critical,Training-only catalog and metadata; chronological tests; freeze hashes,ML Engineer,Mitigated in measured run
+R04,Demand volatility and bulk orders,High,High,Retain spikes; product failure analysis; human review; future intervals,Inventory Manager,Open
+R05,Incorrect lead-time assumptions,High,High,Validate actual supplier distributions before pilot; sensitivity scenario,Operations Manager,Open
+R06,Cost model sensitivity,High,High,Explicit price fraction/penalties; terminal asset accounting; Finance signoff,Finance Representative,Open
+R07,Budget or pack allocation error,Medium,Critical,"Integer pennies, independent validation, edge budgets and enumeration",QA Engineer,Mitigated in tested scenarios
+R08,Supplier delays,Medium,High,Shadow mode; actual arrival tracking and exception workflow before pilot,Operations Manager,Open
+R09,Overreliance on point forecasts,High,High,Accept/reject controls; show absolute errors; no automatic ordering,Inventory Manager,Partly mitigated
+R10,Insufficient historical coverage,High,High,Disclose one annual cycle; acquire multi-year operational data,Data Analyst,Open
+R11,Model drift after rollout,Medium,High,Define weekly error/bias monitoring and baseline rollback before pilot,ML Engineer,Open; no live deployment
+R12,No operational integration,High,High,Keep local advisory scope; specify stock/supplier contracts for pilot,Operations Manager,Open; production blocker
+R13,Poor stakeholder adoption,Medium,Medium,"Proposed training, override reasons and review-time measurement",Operations Manager,Unvalidated; fictional roles
+R14,Simulation interpreted as realized ROI,High,High,"Visible modeled labels, cost formulas, no annualized or observed ROI claim",Finance Representative,Mitigated in documentation
+R15,Production monitoring gaps,High,Critical,"Separate demo from production; require owner, alerts, SLO and incident plan",Operations Manager,Open; production NO-GO
+R16,Stockout-censored sales,High,High,Treat sales as proxy; collect availability and lost-sales signals,Data Analyst,Open; pilot prerequisite
+R17,Customer identifier exposure,Medium,High,Drop customer/invoice identifiers from derivatives; ignore raw data in Git,Data Analyst,Mitigated in exports
+R18,Raw source unavailable or changes,Low,Medium,Official provenance/checksums; retained small derivatives; fail visibly,Data Analyst,Mitigated for demo; fresh download dependent
+R19,Optional solver unavailable,Low,Medium,Explicit deterministic fallback with no optimality claim,ML Engineer,Mitigated; OR-Tools actually used
+R20,Terminal inventory distorts cost ranking,High,High,Report outstanding assets and asset-adjusted cost beside cash costs,Finance Representative,Partly mitigated
+R21,Approval state lacks enterprise audit controls,High,High,Session-only demo explicitly labeled; durable authorization required for pilot,Operations Manager,Open; production blocker
