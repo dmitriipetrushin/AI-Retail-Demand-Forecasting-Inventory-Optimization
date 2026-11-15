@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "retail-intelligence"
 version = "1.0.0"
-description = "Local retail forecasting and simulated inventory decision support"
+description = "Open-source retail analytics and inventory decision support combining demand forecasting, replenishment planning, budget-constrained optimization, and financial simulation."
 requires-python = ">=3.11"
 authors = [{name = "Dmitry Petrushin"}]
 license = "MIT"

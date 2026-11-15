@@ -1,147 +1,434 @@
-# AI Retail Demand Forecasting & Inventory Decision Support
+# AI Retail Demand Forecasting & Inventory Optimization
 
-**Retail Intelligence — AI Demand & Inventory Control Tower**
-**Dmitry Petrushin · Independent AI Implementation Portfolio Project**
+### Predictive Demand Analytics, Inventory Planning & Budget-Constrained Optimization
 
-> This is a self-directed AI implementation portfolio project. The transaction dataset contains historical retail records, while inventory policies, supplier constraints, stakeholder roles, and business scenarios are simulated. The application is not a production inventory management system.
+An open-source retail analytics and inventory decision-support application that combines demand forecasting, replenishment planning, mathematical optimization, and financial simulation.
 
-## Executive summary
+The system analyzes historical sales transactions, predicts future product demand, recommends inventory replenishment quantities, and evaluates purchasing strategies under different operational constraints.
 
-A working CPU-only forecasting and inventory decision-support application with a measured, deliberately cautious business case. It processes **541,909 real UCI records**, retains **520,893 positive-sales transactions**, selects **25 products using training data only**, compares four forecasting methods and uses OR-Tools to allocate an assumed purchasing budget. Six dashboard pages expose forecasts, configurable inventory assumptions, optimization, simulation and readiness evidence.
+Built with **Python, Streamlit, StatsForecast, and Google OR-Tools**, the application provides an integrated environment for evaluating data-driven inventory management decisions.
 
-**Measured outcome:** AutoETS reduced development WAPE by **16.94%** relative to seasonal naive. Final holdout WAPE was **70.54%** (seasonal naive: 107.83%). Yet in the base simulation Strategy B cost **1.30% higher** and optimized C **2.36% higher** than A. Better forecasting did not establish better purchasing outcomes. The baseline should be retained pending operational validation.
+---
 
-## Business problem
+## Overview
 
-A fictional retailer must balance unavailable stock, slow-moving inventory and a limited budget. Historical averages and manual judgment provide little visibility into forecast error or purchasing tradeoffs. The project turns that problem into explicit requirements, testable hypotheses and separate decisions for a demonstration, analytical pilot and production system. No fictional stakeholder is described as an actual collaborator.
+Effective inventory management requires balancing product availability against purchasing costs, inventory holding expenses, and limited budgets.
 
-## Solution overview
+Traditional replenishment strategies frequently rely on historical averages, fixed reorder levels, and manual estimates.
 
-- Official source acquisition with license/provenance/checksums and a reproducible quality report.
-- Weekly seasonal naive, 28-day moving average, StatsForecast AutoETS and Croston SBA; 7/14/28-day forecasts.
-- Three rolling development windows, training-only catalog/price metadata, frozen selection and preserved holdout.
-- Explainable order-up-to policy, integer-pack OR-Tools allocation and labeled deterministic fallback.
-- Daily lost-sales simulation with A/B/C comparators and three assumption scenarios.
-- Local human review with editable assumptions, budget changes, accept/reject and CSV exports; no real orders.
+These approaches may struggle with:
 
-## Architecture
+- Fluctuating product demand.
+- Seasonal sales patterns.
+- Demand forecasting errors.
+- Overstocking.
+- Product shortages.
+- Limited purchasing budgets.
+- Supplier lead-time uncertainty.
+- Complex replenishment decisions.
+
+**AI Retail Demand Forecasting & Inventory Optimization** combines predictive analytics with mathematical optimization to investigate these challenges.
+
+The application supports inventory planning through forecasts, operational constraints, and scenario-based financial comparisons.
+
+It is a decision-support system and does not execute real purchasing transactions.
+
+---
+
+## Key Features
+
+### Demand Forecasting
+
+Predicts future product demand using historical retail transactions.
+
+Supported forecasting horizons:
+
+- 7 days
+- 14 days
+- 28 days
+
+The application provides:
+
+- Historical sales visualizations.
+- Product-level demand forecasts.
+- Forecast-versus-actual comparisons.
+- Model performance metrics.
+- Forecast error analysis.
+- Interactive product selection.
+
+### Multiple Forecasting Models
+
+The forecasting engine supports four methods.
+
+| Model | Description |
+|---|---|
+| Seasonal Naive | Uses historical seasonal patterns as a baseline |
+| Moving Average | Forecasts demand using recent historical averages |
+| AutoETS | Automated exponential smoothing |
+| Croston SBA | Forecasting method for intermittent demand |
+
+Models are evaluated using chronological backtesting.
+
+**AutoETS** was selected based on development evaluation results.
+
+### Inventory Replenishment Recommendations
+
+Converts demand forecasts into purchasing recommendations.
+
+The replenishment engine considers:
+
+- Predicted demand
+- Current inventory
+- Supplier lead times
+- Safety stock
+- Minimum order quantities
+- Pack sizes
+- Purchasing costs
+- Budget limitations
+
+Inventory assumptions can be modified interactively.
+
+Recommendations update according to the selected parameters.
+
+### Budget-Constrained Optimization
+
+Uses Google OR-Tools with the SCIP solver to generate purchasing allocations under financial and operational constraints.
+
+The optimizer considers:
+
+- Available purchasing budget
+- Product costs
+- Inventory requirements
+- Minimum order quantities
+- Pack-size restrictions
+- Purchasing quantity limits
+
+Optimization outputs include recommended quantities and estimated expenditure.
+
+The application provides simulated accept/reject controls for proposed purchasing plans.
+
+No real orders are placed.
+
+### Inventory Strategy Comparison
+
+The simulation engine compares three replenishment approaches:
+
+**Strategy A — Traditional Baseline**
+
+A conventional replenishment policy.
+
+**Strategy B — Forecast-Informed Replenishment**
+
+Inventory planning using predicted product demand.
+
+**Strategy C — Budget-Constrained Optimization**
+
+Forecast-informed purchasing recommendations adjusted using mathematical optimization.
+
+The system compares modeled operating costs and inventory outcomes across these strategies.
+
+### Financial Impact Simulation
+
+Evaluates inventory strategies under configurable business assumptions.
+
+Supported analysis includes:
+
+- Purchasing expenditure
+- Inventory holding costs
+- Shortage penalties
+- Inventory availability
+- Total modeled operating costs
+- Strategy comparisons
+- Scenario sensitivity analysis
+
+Financial outcomes are simulation results, not verified business savings.
+
+### Interactive Analytics Dashboard
+
+The application contains six pages:
+
+1. **Executive Dashboard** — Operational overview and KPIs.
+2. **Demand Forecasting** — Historical sales, predictions, and model comparisons.
+3. **Inventory Recommendations** — Suggested replenishment quantities.
+4. **Budget Optimization** — Constrained purchasing allocation.
+5. **Business Impact** — Financial simulation and strategy comparisons.
+6. **Evaluation & Deployment Readiness** — Forecast performance and deployment assessment.
+
+Additional functionality includes editable assumptions, interactive charts, simulated purchasing decisions, and CSV exports.
+
+---
+
+## System Architecture
 
 ```mermaid
-flowchart LR
-    A[Official UCI workbook + license/checksum] --> B[Validation + positive-sales cleaning]
-    B --> C[Training-only catalog + zero-padded daily sales]
-    C --> D[3 rolling origins + baseline/candidate models]
-    D --> E[Frozen global model and configuration]
-    E --> F[Preserved final 28-day holdout]
-    E --> G[Post-history forecast refit]
-    G --> H[Assumed stock, costs and supplier rules]
-    H --> I[Replenishment + OR-Tools allocation]
-    C --> J[Daily A/B/C strategy simulation]
-    E --> J
-    F --> K[Local Streamlit decision dashboard]
-    I --> K
-    J --> K
-    K --> L[Human simulated accept / reject]
+flowchart TD
+    A[Historical Retail Transactions] --> B[Data Validation & Preprocessing]
+    B --> C[Daily Product Demand]
+    C --> D[Forecasting Models]
+    D --> E[Chronological Evaluation]
+    E --> F[Selected Forecasting Model]
+    F --> G[Demand Forecasts]
+    G --> H[Inventory Replenishment Engine]
+    I[Inventory & Supplier Assumptions] --> H
+    H --> J[Budget Optimization]
+    J --> K[Purchasing Recommendations]
+    K --> L[Inventory Strategy Simulation]
+    M[Cost & Operating Assumptions] --> L
+    L --> N[Financial Comparison]
+    N --> O[Streamlit Dashboard]
 ```
 
-Modules live in `src/`, reproducible entry points in `scripts/`, fixed configuration in `config/`, small evidence in `reports/`, and business/PM materials in `project-management/` and `portfolio/`. No remote inference, paid API, database or Docker is required.
+### Processing Workflow
 
-## Screenshots
+1. Historical transaction records are loaded and validated.
+2. Sales data is transformed into daily product-level demand.
+3. Forecasting models are evaluated using chronological backtesting.
+4. A forecasting model is selected using development results.
+5. Future demand is estimated.
+6. Inventory replenishment requirements are calculated.
+7. Purchasing recommendations are optimized under budget constraints.
+8. Inventory strategies are simulated and compared.
+9. Results are presented through the interactive dashboard.
 
-Genuine local Chromium captures; see [capture details](screenshots/README.md).
+---
 
-![Executive dashboard](screenshots/01-executive-dashboard.png)
+## Technology Stack
 
-| Forecasting | Budget optimization |
+| Technology | Purpose |
 |---|---|
-| ![Demand forecast](screenshots/02-demand-forecasting.png) | ![Budget allocation](screenshots/04-budget-optimization.png) |
+| Python | Core application |
+| Pandas | Data processing |
+| NumPy | Numerical calculations |
+| StatsForecast | Time-series forecasting |
+| Google OR-Tools | Purchasing optimization |
+| SCIP | Mixed-integer optimization solver |
+| Streamlit | Interactive application |
+| Plotly | Data visualization |
+| Pytest | Automated testing |
 
-Additional captures: [inventory](screenshots/03-inventory-recommendations.png), [business impact](screenshots/05-business-impact.png), [evaluation/readiness](screenshots/06-evaluation-readiness.png).
+All core analytical components execute locally.
 
-## Technology stack
+---
 
-Python 3.11+ (verified on 3.12.3), pandas/NumPy, StatsForecast, OR-Tools SCIP, Streamlit, Plotly, matplotlib and pytest. Statistical models are sufficient for this small predictive-analytics study; no LLM or GPU is used. Direct dependencies are pinned in `requirements.txt`; the exact tested environment is pinned in `requirements-lock.txt` and recorded in the protocol. AutoARIMA was omitted to keep CPU work bounded.
+## Dataset
 
-## Dataset source and attribution
+The application uses the **[UCI Online Retail dataset](https://archive.ics.uci.edu/dataset/352/online+retail)**, containing historical transactions from a UK-based online retailer.
 
-[UCI Online Retail, dataset 352](https://archive.ics.uci.edu/dataset/352/online+retail). Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. [DOI: 10.24432/C5BW33](https://doi.org/10.24432/C5BW33). Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Citation: Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. [https://doi.org/10.24432/C5BW33](https://doi.org/10.24432/C5BW33). Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). This project filters and aggregates the original transactions.
 
-Real source history: 2010-12-01 through 2011-12-09 12:50. Prepared study ends **2011-12-08**, excluding the final partial calendar day. Cancellation/negative sales, invalid prices/codes/dates and exact duplicates are excluded; returns never become positive demand. All countries are retained. Daily series preserve zero recorded sales from first training-observed sale onward. Customer and invoice IDs are omitted from exports. Modified derivatives retain CC BY attribution; project code/original docs are MIT.
+### Dataset Information
 
-[Data documentation](data/README.md) · [Source manifest/checksums](data/source-manifest.json) · [Measured quality report](reports/data-quality-report.md). Raw workbook/archive are ignored by Git. The prepared derivative contains 9,323 rows, and 21.7% have zero recorded sales. Sales are not unconstrained demand: stockout availability is unknown.
+| Property | Value |
+|---|---|
+| Source | UCI Machine Learning Repository |
+| Dataset | Online Retail |
+| License | CC BY 4.0 |
+| Raw transaction records | 541,909 |
+| Retained positive-sales records | 520,893 |
+| Products analyzed | 25 |
+| Historical period | December 2010 – December 2011 |
 
-## Forecasting methodology
+The selected products were identified using training history only.
 
-Selection cutoff **2011-08-18** precedes every validation window. Require 90 active days and 180 calendar days of history; rank by active days, unit volume, then code; retain 25. Product names and median retail-price proxies are also training-only. No weak products are excluded after evaluation.
+Customer identifiers are excluded from exported data.
 
-Development origins are 2011-08-18, 2011-09-15 and 2011-10-13; each predicts 28 days. Select one global model by pooled development WAPE, ties by configured model order. Freeze processing/model/evaluation/configuration/data hashes before the final holdout **2011-11-11–2011-12-08**. Leading 7/14-day results are also exported. The ≥5% development improvement gate is predeclared and was not changed after seeing the holdout.
+### Data Processing
 
-MAE and RMSE use product-day errors; WAPE is total absolute error / total actual units; bias is signed total error / total actual units. MASE uses each training prefix's seven-day seasonal absolute-difference scale, averaging defined scaled errors. Zero denominators remain undefined/blank, with coverage counts. These pooled metrics do not cancel errors across products. Fallbacks and effective models are explicit; measured development/holdout fallback rows: 0.
+The preprocessing pipeline handles:
 
-## Model comparison and evaluation results
+- Missing values.
+- Invalid transaction records.
+- Returns and cancellations.
+- Negative quantities.
+- Invalid prices.
+- Product identification.
+- Daily aggregation.
+- Historical training and evaluation periods.
 
-Primary 28-day horizon; WAPE/bias values in the table are fractions, not percentages.
+The final partial observation day was excluded.
 
-| phase       | model          |     mae |     rmse |   wape |    bias |   mase |
-|:------------|:---------------|--------:|---------:|-------:|--------:|-------:|
-| development | seasonal_naive | 51.9224 | 138.4372 | 0.9530 | -0.1225 | 1.0491 |
-| development | moving_average | 50.1470 | 117.0602 | 0.9204 |  0.0082 | 1.0108 |
-| development | auto_ets       | 43.1250 | 112.2345 | 0.7915 | -0.0592 | 0.8760 |
-| development | croston_sba    | 49.8645 | 117.4620 | 0.9152 | -0.0132 | 0.9919 |
-| holdout     | seasonal_naive | 76.4486 | 224.7853 | 1.0783 |  0.1725 | 1.2757 |
-| holdout     | moving_average | 53.7207 | 153.2872 | 0.7578 | -0.1362 | 1.0114 |
-| holdout     | auto_ets       | 50.0104 | 156.5523 | 0.7054 | -0.2085 | 0.9220 |
-| holdout     | croston_sba    | 57.0434 | 152.5386 | 0.8046 | -0.0068 | 1.0474 |
+Dataset provenance and checksums are recorded to support reproducibility.
 
-Selected final holdout MAE **50.010**, RMSE **156.552**, WAPE **70.54%**, bias **-20.85%**, MASE **0.922**. All models actually ran. No holdout tuning was performed. A later full-history refit produces forecasts for 2011-12-09–2012-01-05 for the historical demonstration, not today's market. Its future actuals are unavailable.
+### Data Limitations
 
-![Model comparison](reports/figures/model-comparison.png)
+Historical sales transactions do not provide complete information about:
 
-[Full evaluation](reports/forecast-evaluation.md) · [Product failures](reports/forecast-failure-analysis.md) · [Machine-readable comparison](reports/model-comparison.csv) · [Frozen protocol](reports/frozen-protocol.json) · [Initial holdout manifest](reports/holdout-manifest.json).
+- Actual historical stock levels.
+- Supplier purchasing costs.
+- Supplier lead times.
+- Lost sales caused by stockouts.
+- Inventory holding expenses.
 
-## Inventory optimization
+These variables are modeled using configurable assumptions.
 
-Target = forecast units over lead + review days + safety stock. Inventory position = on hand + on order. Positive purchase need is rounded up to a pack multiple and MOQ. The optional integer-pack MILP minimizes purchase plus target-shortage/excess cost while enforcing a hard budget in pennies. It reports optimal/feasible/infeasible status; allocation is independently validated. Zero orders are feasible under a zero budget. Required-product tests demonstrate actual infeasibility; inability to fund every target is otherwise a soft shortfall.
+The application distinguishes observed transaction data from simulated inventory and financial information.
 
-A uses an expanding historical average + product-code FIFO budget allocation; B uses the selected forecast + the same FIFO; C uses the selected forecast + optimization. [Mathematical formulation and constraints](reports/optimization-methodology.md). If OR-Tools is unavailable, the app labels a FIFO fallback and makes no optimality claim. OR-Tools SCIP was used for the recorded results.
+---
 
-## Business impact simulation
+## Forecasting Methodology
 
-All policies see identical realized sales-proxy histories and costs under each scenario, with no future sales exposed at ordering time. Base assumptions: 7-day lead, 7-day review, initial 7-day stock cover, z=1.28 safety buffer, six-unit packs, MOQ 12, **£3,000 per review**. Purchase unit cost is **assumed 50% of training median retail price**, rounded to pennies; annual holding 25%; shortage penalty twice assumed purchase cost. Tight budget uses £1,500; slow supply uses a 14-day lead and higher buffer/penalties. See [exact JSON](config/scenarios.json).
+### Chronological Evaluation
 
-Base modeled operating costs: A **£75,697.39**, B **£76,682.09**, C **£77,481.13**. Base modeled fill rates are 47.1%, 45.0%, 39.3%; these stressed budgets do not produce acceptable service. C's modeled cost reductions versus A in tight-budget/slow-supply scenarios are **3.35% / 3.98%**. These are not verified savings or ROI.
+Forecasting models are evaluated using time-ordered data.
 
-Total modeled operating cost = purchases + daily closing-stock holding + unfilled-sales penalties. Average inventory, unmet units, period turnover, fill rate, terminal stock and in-transit assets are also reported. Asset-adjusted cost includes initial inventory value and credits closing/in-transit assets, exposing short-horizon accounting sensitivity. The single-review optimizer does not guarantee the best realized multi-period outcome.
+Random train/test splitting is avoided.
 
-[Business analysis](reports/business-impact-analysis.md) · [Summary CSV](reports/simulation-summary.csv) · [Assumption/cost caveats](project-management/09_business_case_and_roi.md).
+The evaluation includes:
 
-## Project management
+- Three chronological development windows.
+- Model comparison using historical observations.
+- Model selection based on development performance.
+- A separate final holdout period.
 
-The [12-document PM set](project-management/) includes a charter, traceable requirements, explicitly hypothetical six-week roadmap, fictional stakeholder communication/RACI, 21-risk register, fixed acceptance gates, test strategy, measured model report, financial case, readiness decision, adoption/rollback plan and genuine lessons. [Recruiter case study](portfolio/case-study.md) · [Two-minute demo](portfolio/demo-guide.md).
+This design reduces the risk of future information leaking into training.
 
-## Installation
+### Evaluation Metrics
+
+The application reports:
+
+**MAE — Mean Absolute Error**
+
+Average absolute difference between predicted and observed demand.
+
+**RMSE — Root Mean Squared Error**
+
+A measure of forecasting error that penalizes large deviations.
+
+**WAPE — Weighted Absolute Percentage Error**
+
+Aggregate absolute forecasting error relative to observed sales.
+
+**Bias**
+
+Systematic overprediction or underprediction.
+
+**MASE — Mean Absolute Scaled Error**
+
+Forecasting error relative to a historical naive reference.
+
+---
+
+## Forecasting Results
+
+### Selected Model: AutoETS
+
+| Metric | Development | Final Holdout |
+|---|---:|---:|
+| MAE | 43.125 | 50.010 |
+| RMSE | 112.235 | 156.552 |
+| WAPE | 79.15% | 70.54% |
+| Bias | −5.92% | −20.85% |
+| MASE | 0.876 | 0.922 |
+
+AutoETS achieved a **16.94% improvement in development WAPE** compared with the seasonal naive baseline.
+
+However, absolute forecasting errors remained substantial.
+
+The final holdout results indicate significant uncertainty in product-level demand predictions.
+
+The model's forecasting improvement should not be interpreted as proof of improved inventory profitability.
+
+---
+
+## Inventory Optimization
+
+The optimization engine uses Google OR-Tools to allocate purchasing budgets across products.
+
+### Supported Constraints
+
+- Maximum purchasing budget
+- Nonnegative integer purchasing quantities
+- Minimum order quantities
+- Pack-size requirements
+- Replenishment quantity limits
+
+Simulation checks also verify stock conservation.
+
+The implementation was validated across nine strategy/scenario combinations.
+
+All tested optimization constraints passed.
+
+---
+
+## Business Impact Analysis
+
+The application evaluates three inventory strategies using a reproducible financial simulation.
+
+### Base Scenario
+
+| Strategy | Modeled Operating Cost | Difference |
+|---|---:|---:|
+| A — Traditional Baseline | £75,697.39 | — |
+| B — Forecast-Informed | £76,682.09 | +1.30% |
+| C — Optimized | £77,481.13 | +2.36% |
+
+Under the base assumptions, the traditional replenishment strategy produced the lowest modeled operating cost.
+
+The forecasting and optimization strategies did not outperform the traditional baseline.
+
+### Alternative Scenarios
+
+The optimization strategy performed better under selected operational constraints.
+
+| Scenario | Modeled cost reduction |
+|---|---:|
+| Tight purchasing budget | 3.35% |
+| Slow supplier replenishment | 3.98% |
+
+These outcomes demonstrate that optimization performance depends on operating conditions.
+
+### Simulation Assumptions
+
+The financial model includes assumptions about inventory levels, supplier constraints, and costs.
+
+Purchasing prices are estimated at **50% of median historical retail prices from the training data**.
+
+This assumption is illustrative and does not represent verified supplier costs.
+
+**No real financial savings or return on investment have been established.**
+
+---
+
+## Getting Started
+
+### Requirements
+
+- Python 3.11+
+- Sufficient memory for local analytics
+- A modern web browser
+
+### Installation
+
+Navigate to the project directory:
 
 ```bash
-cd /path/to/PortfolioProject3
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements-lock.txt
-python -m pip check
+cd /home/user/PortfolioProject3
 ```
 
-Python 3.11/3.12 is recommended; this run used Python 3.12.3 on Linux. Internet is needed only for installing packages and the official data download. Inference, optimization and the dashboard run locally. No secrets or cloud setup are needed. Direct pinned dependencies can instead be installed with `-r requirements.txt`; the lock is preferred for exact reproduction.
+Create and activate a virtual environment if one does not already exist:
 
-## Running the application
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-The checked-in small processed data/reports support immediate dashboard review after installation:
+Install dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### Start the Application
 
 ```bash
 streamlit run app.py
 ```
 
-Open **http://127.0.0.1:8501**. Use the sidebar for all six pages. Edit stock/lead/safety assumptions under Inventory Recommendations; Budget Optimization uses those session inputs. Changing inputs invalidates an earlier approval. Accept/reject is session-only and submits nothing. The fixed Business Impact experiments do not change when editing a live proposal.
+Open:
 
-## Reproducing experiments
+`http://127.0.0.1:8501`
+
+The checked-in processed data and reports support immediate dashboard use after installation. To reproduce the data preparation, evaluation, and simulation, run:
 
 ```bash
 python -m scripts.download_data
@@ -150,33 +437,140 @@ python -m scripts.train_models
 python -m scripts.run_evaluation
 python -m scripts.run_simulation
 python -m scripts.generate_reports
-python -m scripts.write_portfolio
 ```
 
-Or run `bash scripts/reproduce.sh` after activation. Seed: 42; statistical inference and the one-thread solver are deterministic in the tested environment. Source/version/checksum metadata are retained. Existing initial development/holdout artifacts are verified rather than overwritten. This intentionally prevents accidental tuning against a known holdout. To rerun model fitting independently from scratch, copy the **tracked source/config and the same downloaded raw workbook** into a separate experiment directory, omit generated `reports/` files there (keep the empty `reports/figures/` directory), and run preparation/training/evaluation in that separate directory. Compare its numerical outputs to the preserved initial results. Never delete/replace initial holdout evidence in the main project to bypass a changed protocol.
+For the exact tested package versions, install `requirements-lock.txt` instead of `requirements.txt`. Product selection and the initial holdout are preserved by checksum checks; see [evaluation details](reports/forecast-evaluation.md).
 
-An automated clean refit in an isolated temporary directory is also available: `python -m scripts.verify_reproduction`. The completed run reproduced prepared-data checksums and development/holdout/simulation metrics exactly (maximum numeric difference 0) in the same Python environment. [Clean reproduction evidence](reports/reproduction-verification.json). Run `python -m scripts.verify_project` to audit document links, privacy, manifests and required deliverables.
+---
 
-If the official source is temporarily unavailable, the checked-in real-data derivatives still support artifact review and the dashboard. A fresh raw-data reproduction remains incomplete until the official file is available. No synthetic data was substituted for the measured study.
+## Testing & Verification
 
-## Testing
+The application includes automated tests covering:
+
+- Data validation
+- Sales preprocessing
+- Chronological data splitting
+- Forecast generation
+- Forecast evaluation
+- Inventory calculations
+- Budget optimization
+- Inventory simulation
+- Financial calculations
+- Dashboard consistency
+
+### Automated Tests
+
+Final verification reported:
+
+**55 passed, 0 failed, 0 skipped.**
+
+A separate clean reproduction confirmed identical prepared-data checksums and numerically identical development, holdout, and simulation comparison results.
+
+### Browser Verification
+
+The Streamlit application was tested using Chromium.
+
+Verified functionality includes:
+
+- Navigation across all six pages
+- Forecast controls
+- Budget modifications
+- Zero-budget optimization
+- Simulated purchasing decisions
+- Dashboard rendering
+
+No browser console errors were reported.
+
+### Running Tests
 
 ```bash
-python -m pytest --junitxml=reports/test-results.xml
+python -m pytest -q
 ```
 
-The completed local run includes real workbook/model integration, leakage tests, exact metrics, inventory arithmetic, budget/pack/MOQ/infeasibility, brute-force solver comparison, cost/conservation and sensitivity checks, dashboard consistency and Streamlit AppTest. Real-data integration tests skip explicitly if the raw workbook is absent, so download it for a full zero-skip run. [Actual test XML](reports/test-results.xml) · [Browser evidence](reports/browser-verification.md). CI installs pinned dependencies and downloads the same official source; this workflow is provided but has not been run on GitHub because nothing was published.
+---
 
-Measured local run: **55 tests, 0 failures, 0 skips**. See the XML for duration and dependency deprecation warnings.
+## Deployment Readiness
 
-## Deployment recommendation
+The system supports analytical experimentation and inventory-planning simulations.
 
-Local portfolio demonstration: **GO**. Controlled analytical business pilot: **CONDITIONAL GO**, contingent on real stock/cost/supplier data, human ownership and shadow-mode validation. Production inventory deployment: **NO-GO**. Retain the traditional policy until actual operational benefit is established. [Evidence-based decision](project-management/10_go_no_go_decision.md).
+### Current Assessment
 
-## Limitations
+| Environment | Recommendation |
+|---|---|
+| Local demonstration | GO |
+| Controlled analytical shadow pilot | CONDITIONAL GO |
+| Production purchasing operations | NO-GO |
 
-One year of historical wholesale-influenced sales is not current demand. Zero sales are ambiguous; availability and lost demand are unknown. Prices are nominal GBP and costs are assumed. AutoETS has high absolute errors and no calibrated uncertainty intervals. The 28-day simulation has stressed budgets and terminal-value effects; it does not validate ROI or service levels. There is no live integration, authentication, durable approval trail, production monitoring or supplier execution. Live edits illustrate scenarios and do not update the original study. Screenshots and tests establish local behavior, not production readiness.
+### Production Requirements
 
-## Future development
+Before considering production use, the system would require:
 
-Collect real stock/availability, purchasing price and supplier arrival histories; validate multiple annual cycles; add calendar/holiday features and calibrated intervals in separately labeled experiments; evaluate service and working-capital tradeoffs with multi-period stochastic policies; add durable authorization/audit and operational monitoring only after a real pilot decision. Preserve the original holdout as evidence.
+- Validated inventory records.
+- Verified purchasing costs.
+- Actual supplier lead-time data.
+- More comprehensive forecasting history.
+- Operational integration.
+- Model performance monitoring.
+- Access controls.
+- Business-user acceptance testing.
+- Demonstrated economic value under real conditions.
+
+The base simulation does not justify replacing the traditional replenishment policy.
+
+---
+
+## Known Limitations
+
+- Forecasting errors remain high.
+- Historical data covers approximately one annual cycle.
+- Observed sales may underestimate true demand during stockouts.
+- Historical inventory records are unavailable.
+- Supplier lead times are simulated.
+- Purchasing costs are estimated.
+- Financial outcomes depend on modeling assumptions.
+- No live inventory or purchasing systems are connected.
+- The application does not execute real purchases.
+- Production deployment has not been validated.
+
+---
+
+## Future Development
+
+Potential improvements include:
+
+- Additional forecasting models.
+- Probabilistic demand forecasts.
+- Improved handling of intermittent demand.
+- Longer historical datasets.
+- Supplier lead-time forecasting.
+- Real inventory-system integration.
+- Product-level service targets.
+- More advanced stockout modeling.
+- Multi-location inventory optimization.
+- Automated model monitoring.
+- Real operational cost validation.
+
+---
+
+## Documentation
+
+The repository includes technical documentation, evaluation evidence, and operational analysis.
+
+Key resources:
+
+- [Forecast evaluation](reports/forecast-evaluation.md) — Forecasting methodology and results.
+- [Business impact analysis](reports/business-impact-analysis.md) — Inventory strategy comparison.
+- [Final verification](reports/final-verification.md) — Reproducibility and test evidence.
+- [Project management](project-management/) — Requirements, implementation planning, risk assessment, and deployment readiness documentation.
+
+---
+
+## Development Status
+
+**Current stage:** Functional forecasting and inventory decision-support application.
+
+**Supported use:** Local analytics, experimentation, and inventory strategy simulation.
+
+**Production readiness:** Not approved for automated purchasing operations.
+
+The application demonstrates how forecasting, mathematical optimization, and financial modeling can be combined to support inventory-planning decisions while making uncertainty and operational constraints visible.
